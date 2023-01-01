@@ -1,10 +1,8 @@
 package webserver;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +22,26 @@ public class RequestHandler extends Thread {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+
+            //BufferedReader을 통해 헤더 값 읽기
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            //http header 첫 번째 줄 읽기
+            String line = br.readLine();
+
+            //null 일 경우 예외처리
+            if(line == null) return;
+
+            //첫 번째 line 공백으로 나누기
+            String[] tokens = line.split(" ");
+
+            //두번째 토큰 값이 요청 URL
+            String url = tokens[1];
+
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello World".getBytes();
+
+            //webapp 밑에 있는 url 파일 경로를 byte 로 저장
+            byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
