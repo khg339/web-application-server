@@ -21,7 +21,22 @@
 <br/>
 
 ### 📌 요구사항 1 - http://localhost:8080/index.html 로 접속시 응답
-* 
+- Log : 구글링을 통해 기본적인 메소드 사용
+
+- HTTP Header & body
+  - HTTP 헤더는 클라이언트와 서버가 요청 또는 응답으로 부가적인 정보를 전송할 수 있도록 해준다. <br/>
+  부가적 정보라 함은, 대표적으로 "요청자", "컨텐트 타입", "캐싱" 등등(수십 가지)가 있다.
+
+  - HTTP 본문에는 실제 데이터 컨텐츠가 나타난다. HTML, 이미지, CSS 또는 JavaScript 파일 등이 올 수 있다.
+
+- byte[] Files.readAllBytes(Path filepath) <br/>
+: 매개변수로 파일의 경로를 받아 파일의 모든 내용을 byte로 변환시킴
+
+- .toPath() <br/>
+: Path객체로 변환시킴
+
+
+<br/>
 
 ### 📌 요구사항 2 - get 방식으로 회원가입
 * 
