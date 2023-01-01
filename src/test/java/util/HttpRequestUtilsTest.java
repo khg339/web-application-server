@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Map;
 
+import model.User;
 import org.junit.Test;
 
 import util.HttpRequestUtils.Pair;
@@ -12,15 +13,19 @@ import util.HttpRequestUtils.Pair;
 public class HttpRequestUtilsTest {
     @Test
     public void parseQueryString() {
-        String queryString = "userId=javajigi";
-        Map<String, String> parameters = HttpRequestUtils.parseQueryString(queryString);
-        assertThat(parameters.get("userId"), is("javajigi"));
-        assertThat(parameters.get("password"), is(nullValue()));
 
-        queryString = "userId=javajigi&password=password2";
-        parameters = HttpRequestUtils.parseQueryString(queryString);
-        assertThat(parameters.get("userId"), is("javajigi"));
-        assertThat(parameters.get("password"), is("password2"));
+        //params 값
+        String queryString = "userId=khg339&password=password&name=hyunji&email=khg339@xxxxx.xxx";
+        //userInfo 에 params 값 저장
+        Map<String, String> userInfo = HttpRequestUtils.parseQueryString(queryString);
+        //User 클래스에 저장
+        User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
+
+        //결과 확인
+        assertThat(userInfo.get("userId"), is(user.getUserId()));
+        assertThat(userInfo.get("password"), is(user.getPassword()));
+        assertThat(userInfo.get("name"), is(user.getName()));
+        assertThat(userInfo.get("email"), is(user.getEmail()));
     }
 
     @Test
