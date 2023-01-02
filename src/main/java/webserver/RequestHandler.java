@@ -47,6 +47,8 @@ public class RequestHandler extends Thread {
                 headerInfo.put(info[0], info[1]);
             }
 
+            DataOutputStream dos = new DataOutputStream(out);
+
             //#2 회원가입이면 body 에 저장된 회원정보 읽기
             if(url.startsWith("/user/create")){
                 String params = IOUtils.readData(br, Integer.parseInt(headerInfo.get("Content-Length")));
@@ -56,14 +58,16 @@ public class RequestHandler extends Thread {
                 Map<String, String> userInfo = HttpRequestUtils.parseQueryString(params);
                 User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
                 log.info("userId = " + user.getUserId() + ", password = " + user.getPassword() + ", name = " + user.getName() + ", email = " + user.getEmail());
+
+                //index.html 로 redirect
+                response302Header(dos);
             }
-
-            DataOutputStream dos = new DataOutputStream(out);
-
-            //webapp 밑에 있는 url 파일 경로를 byte 로 저장
-            byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            else{
+                //webapp 밑에 있는 url 파일 경로를 byte 로 저장
+                byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -74,6 +78,16 @@ public class RequestHandler extends Thread {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void response302Header(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
