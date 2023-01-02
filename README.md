@@ -59,7 +59,9 @@
 
 ### 📌 요구사항 4 - redirect 방식으로 이동
 - https://en.wikipedia.org/wiki/HTTP_302 를 참고하여 HTTP 302 코드 사용하기(response302Header 구현)
+
 - HTTP 302는 페이지를 redirect할 때 사용한다.
+
 - url이 "/user/create"일 경우, 즉 회원가입 창에서 회원 저장을 끝내면 redirect하기 위해 response302Header을 호출한다. 
 	이외의 경우 else문을 통해 response202Header을 호출하고 본문을 출력한다.
 	
@@ -67,7 +69,15 @@
 
 
 ### 📌 요구사항 5 - cookie
-* 
+- 아이디 값에 해당하는 User가 없을 경우 NullPointError가 발생한다. 따라서 해당 아이디의 유저가 존재하는 지 부터 검사한다.
+
+- 아이디가 존재할 경우 비밀번호 확인을 진행한다.
+
+- redirect를 해줘야하기 때문에 202가 아닌 302를 변형한다.
+
+- 성공했을 때와 실패했을 때 redirect 해주는 url이 다르기 때문에 이동할 주소와 쿠키값을 모두 전달받는 respose302HeaderWithCookie를 구현해야한다.
+
+<br/><br/>
 
 ### 📌 요구사항 6 - stylesheet 적용
 * 
