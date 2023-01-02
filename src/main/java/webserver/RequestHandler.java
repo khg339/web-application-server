@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sun.javafx.collections.MappingChange;
+import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class RequestHandler extends Thread {
             DataOutputStream dos = new DataOutputStream(out);
 
             //#2 회원가입이면 body 에 저장된 회원정보 읽기
-            if(url.startsWith("/user/create")){
+            if(url.equals("/user/create")){
                 String params = IOUtils.readData(br, Integer.parseInt(headerInfo.get("Content-Length")));
                 log.info("params = " + params);
 
@@ -59,10 +60,41 @@ public class RequestHandler extends Thread {
                 User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
                 log.info("userId = " + user.getUserId() + ", password = " + user.getPassword() + ", name = " + user.getName() + ", email = " + user.getEmail());
 
+                //#4 Database에 User 저장
+                DataBase.addUser(user);
+                log.info("데이터베이스 저장 정보 : " + DataBase.findUserById(user.getUserId()).getUserId());
+
                 //index.html 로 redirect
                 response302Header(dos);
             }
-            else{
+            //#5 로그인이면 body에 저장된 로그인 정보 읽기
+            else if (url.equals("/user/login")) {
+                String params = IOUtils.readData(br, Integer.parseInt(headerInfo.get("Content-Length")));
+                log.info("params = " + params);
+                Map<String, String> loginInfo = HttpRequestUtils.parseQueryString(params);
+
+                //#6 불러온 로그인 정보 확인 및 쿠키값 설정
+                String cookie = "";
+                if(DataBase.findUserById(loginInfo.get("userId")) == null){ //아이디가 없으면
+                    cookie = "logined=false";
+                    url = "/user/login_failed.html";
+                }
+                else{ //아이디가 존재하면
+                    User user = DataBase.findUserById(loginInfo.get("userId"));
+                    if(loginInfo.get("password").equals(user.getPassword())){ //비밀번호가 맞으면
+                        cookie = "logined=true";
+                        url = "/index.html";
+                    }
+                    else{ //비밀번호가 틀리면
+                        cookie = "logined=false";
+                        url = "/user/login_failed.html";
+                    }
+                }
+
+                //#7 쿠키값에 따른 redirect
+                response302HeaderWithCookie(dos, url, cookie);
+                
+            } else{
                 //webapp 밑에 있는 url 파일 경로를 byte 로 저장
                 byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
                 response200Header(dos, body.length);
@@ -88,6 +120,17 @@ public class RequestHandler extends Thread {
         try {
             dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
             dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void response302HeaderWithCookie(DataOutputStream dos, String url, String cookie) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 FOUND \r\n");
+            dos.writeBytes("Location: " + url + "\r\n");
+            dos.writeBytes("Set-Cookie: " + cookie + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
