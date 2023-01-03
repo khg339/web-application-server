@@ -114,6 +114,7 @@ public class RequestHandler extends Thread {
                         sb.append("</td><td>" + user.getEmail());
                         sb.append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
                         sb.append("</tr>");
+                        idx++;
                     }
                     sb.append("</table>");
 
