@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sun.javafx.collections.MappingChange;
 import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
@@ -94,7 +93,17 @@ public class RequestHandler extends Thread {
 
                 //#7 쿠키값에 따른 redirect
                 response302HeaderWithCookie(dos, url, cookie);
-                
+            }
+            //#8 사용자 목록 리스트 페이지
+            else if (url.equals("/user/list")) {
+                String cookie = HttpRequestUtils.parseCookies(headerInfo.get("Cookie")).get("logined");
+
+                if(Boolean.parseBoolean(cookie)){ //로그인상태면
+                    //사용자 목록 출력
+                }
+                else{ //로그인이 안된 상태면
+                    response302HeaderWithCookie(dos, "/user/login.html", "logined=false");
+                }
             } else{
                 //webapp 밑에 있는 url 파일 경로를 byte 로 저장
                 byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
