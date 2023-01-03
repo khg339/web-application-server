@@ -128,6 +128,7 @@ public class RequestHandler extends Thread {
             } else{
                 //webapp 밑에 있는 url 파일 경로를 byte 로 저장
                 byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
+                if(headerInfo.get("Accept").contains("text/css")) response200CssHeader(dos, body.length);
                 response200Header(dos, body.length);
                 responseBody(dos, body);
             }
@@ -140,6 +141,17 @@ public class RequestHandler extends Thread {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void response200CssHeader(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/css\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
