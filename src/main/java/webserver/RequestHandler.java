@@ -46,6 +46,7 @@ public class RequestHandler extends Thread {
             while(!"".equals(line = br.readLine())){
                 String[] info = line.split(": ");
                 headerInfo.put(info[0], info[1]);
+                System.out.println(info[0] + " : " + info[1]);
             }
 
             DataOutputStream dos = new DataOutputStream(out);
