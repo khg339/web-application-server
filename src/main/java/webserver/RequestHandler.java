@@ -2,7 +2,9 @@ package webserver;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,7 +101,25 @@ public class RequestHandler extends Thread {
                 String cookie = HttpRequestUtils.parseCookies(headerInfo.get("Cookie")).get("logined");
 
                 if(Boolean.parseBoolean(cookie)){ //로그인상태면
+                    int idx = 1;
                     //사용자 목록 출력
+                    Collection<User> users = DataBase.findAll();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("<table border='1'>");
+                    sb.append("<thead><tr><th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th></tr></thead>");
+                    for(User user : users){
+                        sb.append("<tr>");
+                        sb.append("<th scope=\"row\">" + idx + "</th><td>" + user.getUserId());
+                        sb.append("</td><td>" + user.getName());
+                        sb.append("</td><td>" + user.getEmail());
+                        sb.append("</td><td><a href=\"#\" class=\"btn btn-success\" role=\"button\">수정</a></td>");
+                        sb.append("</tr>");
+                    }
+                    sb.append("</table>");
+
+                    byte[] body = URLDecoder.decode(sb.toString(), "UTF-8").getBytes();
+                    response200Header(dos, body.length);
+                    responseBody(dos, body);
                 }
                 else{ //로그인이 안된 상태면
                     response302HeaderWithCookie(dos, "/user/login.html", "logined=false");
