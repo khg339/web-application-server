@@ -79,8 +79,25 @@
 
 <br/><br/>
 
-### 📌 요구사항 6 - stylesheet 적용
-* 
+### 📌 요구사항 6 - 사용자 목록 출력
+- 로그인이 안된 상태(logined=flase)일 때는 /user/login.html로 redirect한다.
+
+- Collection을 통해 User 객체 집합을 DataBase에서 꺼내 저장한다.
+
+- StringBuilder을 통해 body에 출력할 html정보를 담는다. 한마디로 StringBuilder에 사용자 목록 테이블을 작성하여 저장한다.
+
+- URLDecoder을 통해 UTF-8로 디코딩 해줘야 모든 문자가 정상적으로 출력된다.
+
+<br/><br/>
+
+### 📌 요구사항 7 - CSS 지원
+- 현재 구현된 response200Header 메소드에는 Content-Type이 text/html로 설정되어 있어 css파일이 입력돼도 html로 인식한다.
+
+- 따라서 response200CssHeader 메소드를 별도로 구현하여 css파일이 입력되었을 때는 Content-Type이 text/css가 되도록 한다.
+
+- Header 정보에서 Accept가 text/css면 response200CssHeader을 사용할 수 있도록 처리해준다.
+
+
 
 ### heroku 서버에 배포 후
 * 
