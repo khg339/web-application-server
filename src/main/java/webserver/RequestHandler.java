@@ -47,7 +47,7 @@ public class RequestHandler extends Thread {
             while(!"".equals(line = br.readLine())){
                 String[] info = line.split(": ");
                 headerInfo.put(info[0], info[1]);
-                System.out.println(info[0] + " : " + info[1]);
+                log.info("header : {}", line);
             }
 
             DataOutputStream dos = new DataOutputStream(out);
@@ -55,16 +55,16 @@ public class RequestHandler extends Thread {
             //#2 회원가입이면 body 에 저장된 회원정보 읽기
             if(url.equals("/user/create")){
                 String params = IOUtils.readData(br, Integer.parseInt(headerInfo.get("Content-Length")));
-                log.info("params = " + params);
+                log.info("params : {}", params);
 
                 //#3 불러온 회원 정보를 User 클래스에 저장
                 Map<String, String> userInfo = HttpRequestUtils.parseQueryString(params);
                 User user = new User(userInfo.get("userId"), userInfo.get("password"), userInfo.get("name"), userInfo.get("email"));
-                log.info("userId = " + user.getUserId() + ", password = " + user.getPassword() + ", name = " + user.getName() + ", email = " + user.getEmail());
+                log.info("user : {}", user);
 
                 //#4 Database에 User 저장
                 DataBase.addUser(user);
-                log.info("데이터베이스 저장 정보 : " + DataBase.findUserById(user.getUserId()).getUserId());
+                log.info("데이터베이스 저장 정보 : {}", DataBase.findUserById(user.getUserId()));
 
                 //index.html 로 redirect
                 response302Header(dos);
@@ -72,7 +72,7 @@ public class RequestHandler extends Thread {
             //#5 로그인이면 body에 저장된 로그인 정보 읽기
             else if (url.equals("/user/login")) {
                 String params = IOUtils.readData(br, Integer.parseInt(headerInfo.get("Content-Length")));
-                log.info("params = " + params);
+                log.info("params : {}", params);
                 Map<String, String> loginInfo = HttpRequestUtils.parseQueryString(params);
 
                 //#6 불러온 로그인 정보 확인 및 쿠키값 설정
