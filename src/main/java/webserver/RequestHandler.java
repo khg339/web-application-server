@@ -36,6 +36,7 @@ public class RequestHandler extends Thread {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             //http header 첫 번째 줄 읽기
             String line = br.readLine();
+            log.info("request line : {}", line); //첫번째 라인은 헤더의 요청 라인
             //null 일 경우 예외처리
             if(line == null) return;
             //첫 번째 line 공백으로 나누기
