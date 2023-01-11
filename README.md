@@ -1,3 +1,9 @@
+# 💙 실습 과정에 대한 자세한 설명 및 정리
+* velog : [실습 진행방법](https://velog.io/@khg339/Next-Step-3%EC%9E%A5-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95-%EB%B0%8F-%EC%84%9C%EB%B2%84-%EC%8B%A4%EC%8A%B5-%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD) / 
+[추가 공부](https://velog.io/@khg339/Next-Step-HTTP-%EC%9B%B9-%EC%84%9C%EB%B2%84-%EC%9D%B4%ED%95%B4)
+
+<br/><br/><br/>
+
 # 🔧 실습을 위한 개발 환경 세팅
 * https://github.com/slipp/web-application-server 프로젝트를 자신의 계정으로 Fork한다. Github 우측 상단의 Fork 버튼을 클릭하면 자신의 계정으로 Fork된다.
 * Fork한 프로젝트를 eclipse 또는 터미널에서 clone 한다.
