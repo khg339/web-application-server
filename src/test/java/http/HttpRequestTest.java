@@ -1,7 +1,8 @@
-package webserver;
+package http;
 
 import static org.junit.Assert.*;
 
+import http.HttpRequest;
 import org.junit.Test;
 
 import java.io.File;
