@@ -15,6 +15,14 @@ public class HttpResponseTest {
         HttpResponse response = new HttpResponse(createOutputStream("Http_Forward.txt"));
         response.forward("/index.html");
     }
+
+    @Test
+    public void responseRedirect() throws Exception {
+        //Http_Redirect.txt 결과는 응답 header 에 Location 정보가 /index.html 로 포함되어 있어야 한다.
+        HttpResponse response = new HttpResponse(createOutputStream("Http_Redirect.txt"));
+        response.sendRedirect("/index.html");
+    }
+
     private OutputStream createOutputStream(String filename) throws FileNotFoundException {
         return new FileOutputStream(testDirectory + filename);
     }
