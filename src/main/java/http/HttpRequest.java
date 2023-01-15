@@ -17,7 +17,7 @@ public class HttpRequest {
     private Map<String, String> header = new HashMap<>();
     private Map<String, String> params = new HashMap<>();
 
-    HttpRequest(InputStream inputStream) {
+    public HttpRequest(InputStream inputStream) {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             //http header 첫 번째 줄 읽기(요청라인)

@@ -18,7 +18,7 @@ public class HttpResponse {
     private DataOutputStream dos;
     private Map<String, String> header = new HashMap<>();
 
-    HttpResponse(OutputStream outputStream){
+    public HttpResponse(OutputStream outputStream){
         dos = new DataOutputStream(outputStream);
     }
 
