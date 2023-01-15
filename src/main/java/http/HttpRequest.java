@@ -57,8 +57,11 @@ public class HttpRequest {
 
         //GET 방식
         int index = tokens[1].indexOf("?");
-        path = tokens[1].substring(0, index); //Path 값
-        params = HttpRequestUtils.parseQueryString(tokens[1].substring(index+1)); //쿼리스트링 값
+        if(index == -1) path = tokens[1];
+        else{
+            path = tokens[1].substring(0, index); //Path 값
+            params = HttpRequestUtils.parseQueryString(tokens[1].substring(index+1)); //쿼리스트링 값
+        }
     }
 
     public String getHeader(String field){
