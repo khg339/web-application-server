@@ -12,7 +12,7 @@ import java.util.Map;
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 
-    private String method;
+    private HttpMethod method;
     private String path;
     private Map<String, String> header = new HashMap<>();
     private Map<String, String> params = new HashMap<>();
@@ -37,7 +37,7 @@ public class HttpRequest {
             }
 
             //POST 경우 본문읽기
-            if(method.equals("POST")){
+            if(method.isPost()){
                 String body = IOUtils.readData(br, Integer.parseInt(header.get("Content-Length")));
                 params = HttpRequestUtils.parseQueryString(body);
             }
@@ -48,9 +48,9 @@ public class HttpRequest {
 
     private void processRequestLine(String line){
         String[] tokens = line.split(" ");
-        method = tokens[0]; //HTTP 메소드 저장
+        method = HttpMethod.valueOf(tokens[0]); //HTTP 메소드 저장
 
-        if("POST".equals(method)){ //POST 방식
+        if(method.isPost()){ //POST 방식
             path = tokens[1];
             return;
         }
@@ -72,12 +72,8 @@ public class HttpRequest {
         return params.get(field);
     }
 
-    public String getMethod() {
+    public Enum<HttpMethod> getMethod() {
         return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
     }
 
     public String getPath() {
