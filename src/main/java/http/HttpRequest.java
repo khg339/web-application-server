@@ -72,7 +72,7 @@ public class HttpRequest {
         return params.get(field);
     }
 
-    public Enum<HttpMethod> getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
