@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import controller.Controller;
 import db.DataBase;
@@ -35,6 +36,12 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = new HttpRequest(in);
             HttpResponse response = new HttpResponse(out);
+
+            //세션 아이디 추가
+            //Cookie 값 중 JSESSIONID 가 존재하지 않으면, 응답 헤더의 쿠키 값으로 추가
+            if(request.getCookies().getCookie("JSESSIONID") == null){
+                response.addHeader("Set-Cookie", "JSESSIONID=" + UUID.randomUUID()); //랜덤 아이디
+            }
 
             Controller controller = RequestMapping.getController(request.getPath());
             if(controller == null){

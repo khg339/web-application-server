@@ -63,6 +63,9 @@ public class HttpRequest {
             params = HttpRequestUtils.parseQueryString(tokens[1].substring(index+1)); //쿼리스트링 값
         }
     }
+    public HttpCookie getCookies(){
+        return new HttpCookie(getHeader("Cookie"));
+    }
 
     public String getHeader(String field){
         return header.get(field);
