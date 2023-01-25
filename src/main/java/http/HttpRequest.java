@@ -67,6 +67,10 @@ public class HttpRequest {
         return new HttpCookie(getHeader("Cookie"));
     }
 
+    public HttpSession getSession(){
+        return HttpSessions.getSession(getCookies().getCookie("JSESSIONID"));
+    }
+
     public String getHeader(String field){
         return header.get(field);
     }
